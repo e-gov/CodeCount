@@ -12,5 +12,5 @@ Tekstide ühitamisel on kasutatud Google vahendit [https://github.com/google/dif
 
 [SÕNAD.txt](https://github.com/e-gov/TextAnalysis/blob/master/S%C3%95NAD.txt) sisaldab Eesti nelja valimisseaduse (RKVS, KOVVS, EPVS, RaHS) sõnade nimekirja.
 
-TO DO:  [https://github.com/Filosoft/vabamorf](https://github.com/Filosoft/vabamorf) abil ühistada sõnade nimekiri s.t viia lemmade e sõna põhivormide kujule.
+ÜhestatudKordumatud.txt[] sisaldab [https://github.com/Filosoft/vabamorf](https://github.com/Filosoft/vabamorf) abil ühistatud (tüvekujule viidud) sõnade nimekirja.
 
