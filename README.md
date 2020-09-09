@@ -1,6 +1,6 @@
 Koodi ja õigustekstide masinanalüüsi POC. Repos on järgmised katsetused:
 
-1  Identifikaatorite sageduse ja ulatuse analüüs koodis (kaust `count`).
+1  Identifikaatorite sageduse ja ulatuse analüüs koodis: [count](https://github.com/e-gov/CodeCount/tree/master/count).
 
 Vt [3 things that counting words can reveal on your code](https://www.fluentcpp.com/2018/10/09/3-things-that-counting-words-can-reveal-on-your-code/ ).
 
