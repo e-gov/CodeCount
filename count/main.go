@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -12,29 +13,43 @@ import (
 
 func main() {
 
-	// Process all *.go files in current directory.
+	// Parse command line flags.
+	var cFlag = flag.Bool("c", false, "-c - Output only comments")
+	var hFlag = flag.Bool("h", false, "-c - Output only comments")
+	flag.Parse()
+
+	if *hFlag {
+		fmt.Println(`Usage:
+		-c - Output only comments`)
+		os.Exit(0)
+	}
+
+	// Get current directory.
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Println(err)
 	}
 	fmt.Printf("directory: %v\n", dir)
 
+	// Parse all *.go files in the current directory.
 	fset := token.NewFileSet()
-	//f, err := parser.ParseFile(fset, "src.go", src, 0)
-	pkgs, err := parser.ParseDir(fset, dir, nil, 0)
+	pkgs, err := parser.ParseDir(fset, dir, nil, parser.ParseComments)
 	if err != nil {
 		panic(err)
 	}
 
+	// Walk all parsed packages.
 	for _, pkg := range pkgs {
 		fmt.Printf("  package: %v\n", pkg.Name)
+		// Walk all files of the package.
 		for fileName, file := range pkg.Files {
 			fmt.Printf("    file: %v\n", fileName)
 
-			// "Properties" (props) of and identifier are:
-			// count, position of first and last occurrence (span).
+			// "Properties" (props) of and identifier:
 			type idProps struct {
-				Count    int
+				// Count of occurrencies.
+				Count int
+				// Position of first and last occurrence (span).
 				FirstPos token.Pos
 				LastPos  token.Pos
 			}
@@ -56,21 +71,21 @@ func main() {
 				var s string
 				// Count identifiers.
 				switch x := n.(type) {
-				// case *ast.BasicLit:
-				//	s = x.Value
 				case *ast.Ident:
-					s = x.Name
-					p := idCountersMap[s]
-					p.Count = p.Count + 1
-					if p.FirstPos == 0 {
-						p.FirstPos = n.Pos()
-					} else if n.Pos() < p.FirstPos {
-						p.FirstPos = n.Pos()
+					if !*cFlag {
+						s = x.Name
+						p := idCountersMap[s]
+						p.Count = p.Count + 1
+						if p.FirstPos == 0 {
+							p.FirstPos = n.Pos()
+						} else if n.Pos() < p.FirstPos {
+							p.FirstPos = n.Pos()
+						}
+						if n.Pos() > p.LastPos {
+							p.LastPos = n.Pos()
+						}
+						idCountersMap[s] = p
 					}
-					if n.Pos() > p.LastPos {
-						p.LastPos = n.Pos()
-					}
-					idCountersMap[s] = p
 				}
 				return true
 			})
@@ -87,9 +102,19 @@ func main() {
 				},
 			)
 
+			// Print the slice (identifier counts and spans).
 			for _, kv := range idCountsSlice {
 				fmt.Printf("      %v : %v (%v)\n",
 					kv.Name, kv.Count, kv.LastPos-kv.FirstPos+1)
+			}
+
+			// Print file's comments.
+			fmt.Println("COMMENTS:")
+			for _, cGroup := range file.Comments {
+				for _, c := range cGroup.List {
+					fmt.Printf("%v\n", c.Text)
+				}
+
 			}
 
 		}
