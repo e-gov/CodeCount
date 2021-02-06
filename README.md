@@ -16,3 +16,6 @@ Tekstide ühitamisel on kasutatud Google vahendit [https://github.com/google/dif
 
 [ÜhestatudKordumatud.txt](https://github.com/e-gov/CodeCount/blob/master/%C3%9Chtesta/%C3%9ChtestatudKordumatud.txt) sisaldab [https://github.com/Filosoft/vabamorf](https://github.com/Filosoft/vabamorf) abil ühistatud (tüvekujule viidud) sõnade nimekirja.
 
+Vabamorf on kantud WSL kausta `vabamorf`.
+
+
